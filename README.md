@@ -13,7 +13,7 @@ This project is an AI-powered career guidance platform that analyzes user skills
 ## Technologies
 - AI / NLP for skill extraction and matching
 - MongoDB for user profiles and session storage
-- Optional Neo4j for knowledge graph management
+- Neo4j for knowledge graph management
 - Backend APIs integrated with frontend UI
 
 ## Team Members
