@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.env
+.env.*
+
+# Dataset (Onet or any large files)
+BD/txt/OnsetDATA/
+BD/data/
+*.zip
+*.csv
+*.tsv
+
+# Logs
+*.log
+
+# IDE / Editor
+.vscode/
