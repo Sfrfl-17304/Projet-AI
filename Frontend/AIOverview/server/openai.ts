@@ -2,7 +2,16 @@
 import OpenAI from "openai";
 
 // the newest OpenAI model is "gpt-5" which was released August 7, 2025. do not change this unless explicitly requested by the user
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const hasOpenAIKey = process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY !== 'sk-test-key-replace-with-real-key';
+
+let openai: OpenAI | null = null;
+function getOpenAI() {
+  if (!hasOpenAIKey) return null;
+  if (!openai) {
+    openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  }
+  return openai;
+}
 
 export async function extractSkillsFromCV(cvText: string): Promise<{
   skills: string[];
@@ -10,8 +19,19 @@ export async function extractSkillsFromCV(cvText: string): Promise<{
   softSkills: string[];
   tools: string[];
 }> {
+  // Fallback response when OpenAI is not configured
+  if (!hasOpenAIKey) {
+    console.warn("OpenAI API key not configured - using fallback skill extraction");
+    return {
+      skills: ["JavaScript", "React", "Python", "Communication", "Problem-solving"],
+      technicalSkills: ["JavaScript", "React", "Python", "Node.js", "SQL"],
+      softSkills: ["Communication", "Problem-solving", "Teamwork", "Leadership"],
+      tools: ["VS Code", "Git", "Docker", "Jira"],
+    };
+  }
+
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI()!.chat.completions.create({
       model: "gpt-5",
       messages: [
         {
@@ -53,8 +73,31 @@ export async function generateRoadmap(params: {
   missingSkills: string[];
   estimatedMonths?: number;
 }): Promise<any> {
+  // Fallback response when OpenAI is not configured
+  if (!hasOpenAIKey) {
+    console.warn("OpenAI API key not configured - using fallback roadmap generation");
+    return {
+      name: `Roadmap to ${params.targetRole}`,
+      estimatedDuration: params.estimatedMonths || 12,
+      milestones: [
+        {
+          name: "Foundation Phase",
+          phase: "Foundation",
+          estimatedWeeks: 12,
+          skills: params.missingSkills.slice(0, 3).map(skill => ({
+            name: skill,
+            description: `Learn ${skill} fundamentals`,
+            estimatedHours: 40,
+            isPrerequisite: true,
+            resources: []
+          }))
+        }
+      ]
+    };
+  }
+
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI()!.chat.completions.create({
       model: "gpt-5",
       messages: [
         {
@@ -108,6 +151,12 @@ export async function chatWithAssistant(params: {
     targetRole?: string;
   };
 }): Promise<string> {
+  // Fallback response when OpenAI is not configured
+  if (!hasOpenAIKey) {
+    console.warn("OpenAI API key not configured - using fallback chat response");
+    return `Hello! I'm SkillAtlas Assistant. Note: OpenAI integration is not configured. To enable full AI features, please add a valid OPENAI_API_KEY to your .env file. Your message was: "${params.userMessage}"`;
+  }
+
   try {
     const systemPrompt = `You are SkillAtlas Assistant, an AI career guidance expert. Help users explore career paths, understand skill requirements, and navigate their learning journey. Be encouraging, specific, and provide actionable advice.
 
@@ -122,7 +171,7 @@ Keep responses concise, friendly, and focused on career development.`;
       { role: "user", content: params.userMessage },
     ];
 
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAI()!.chat.completions.create({
       model: "gpt-5",
       messages: messages as any,
       max_completion_tokens: 1024,

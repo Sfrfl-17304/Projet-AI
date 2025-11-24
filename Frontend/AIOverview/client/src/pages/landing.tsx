@@ -21,7 +21,7 @@ export default function Landing() {
                 Features
               </a>
               <Button asChild data-testid="button-login">
-                <a href="/api/login">Login</a>
+                <a href="/auth">Login</a>
               </Button>
             </div>
           </div>
@@ -43,7 +43,7 @@ export default function Landing() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Button size="lg" asChild data-testid="button-get-started">
-                  <a href="/api/login">Get Started Free</a>
+                  <a href="/auth">Get Started Free</a>
                 </Button>
                 <Button size="lg" variant="outline" asChild data-testid="button-learn-more">
                   <a href="#how-it-works">Learn More</a>
@@ -229,7 +229,7 @@ export default function Landing() {
             Join thousands of students mapping their career journeys with AI-powered guidance.
           </p>
           <Button size="lg" asChild data-testid="button-cta-start">
-            <a href="/api/login">Get Started Free</a>
+            <a href="/auth">Get Started Free</a>
           </Button>
         </div>
       </section>

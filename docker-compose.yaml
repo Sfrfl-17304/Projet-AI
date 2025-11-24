@@ -25,7 +25,22 @@ services:
       - neo4j_data:/data
       - neo4j_logs:/logs
 
+  postgres:
+    image: postgres:16-alpine
+    container_name: skillatlas-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: skillatlas
+      POSTGRES_USER: skillatlas
+      POSTGRES_PASSWORD: skillatlas123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
 volumes:
   mongo_data:
   neo4j_data:
   neo4j_logs:
+  postgres_data:
+

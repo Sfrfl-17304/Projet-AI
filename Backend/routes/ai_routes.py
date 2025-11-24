@@ -20,8 +20,8 @@ from models.ai_models import (
 )
 from services.ai.skill_extractor import get_skill_extractor
 from services.ai.embeddings_service import get_embeddings_service
-from services.ai.llm_service import get_llm_service
-from services.ai.rag_service import get_rag_service
+# from services.ai.llm_service import get_llm_service  # Temporarily disabled - needs langchain
+# from services.ai.rag_service import get_rag_service  # Temporarily disabled - needs langchain
 import PyPDF2
 import io
 import logging

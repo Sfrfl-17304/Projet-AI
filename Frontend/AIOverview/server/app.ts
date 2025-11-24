@@ -1,4 +1,8 @@
 import { type Server } from "node:http";
+import { config } from "dotenv";
+
+// Load environment variables from .env file
+config();
 
 import express, {
   type Express,
@@ -6,6 +10,7 @@ import express, {
   Response,
   NextFunction,
 } from "express";
+import cors from "cors";
 
 import { registerRoutes } from "./routes";
 
@@ -21,6 +26,16 @@ export function log(message: string, source = "express") {
 }
 
 export const app = express();
+
+// CORS configuration - must be before session middleware
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? process.env.FRONTEND_URL 
+    : 'http://localhost:5000',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 declare module 'http' {
   interface IncomingMessage {

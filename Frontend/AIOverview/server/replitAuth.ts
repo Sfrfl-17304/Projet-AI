@@ -20,10 +20,32 @@ const getOidcConfig = memoize(
 
 export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
+  const MOCK_MODE = process.env.MOCK_DB === 'true';
+  
+  console.log("🔧 Session configuration - MOCK_MODE:", MOCK_MODE, "DATABASE_URL:", !!process.env.DATABASE_URL);
+  
+  // Use memory store in mock mode
+  if (MOCK_MODE) {
+    console.log("📝 Using memory session store");
+    return session({
+      secret: process.env.SESSION_SECRET || 'dev-secret',
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax',
+        maxAge: sessionTtl,
+      },
+    });
+  }
+  
+  // PostgreSQL store when database is available
+  console.log("🗄️  Using PostgreSQL session store");
   const pgStore = connectPg(session);
   const sessionStore = new pgStore({
     conString: process.env.DATABASE_URL,
-    createTableIfMissing: false,
+    createTableIfMissing: true, // Create table if it doesn't exist
     ttl: sessionTtl,
     tableName: "sessions",
   });
@@ -34,7 +56,8 @@ export function getSession() {
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       maxAge: sessionTtl,
     },
   });
@@ -61,10 +84,22 @@ async function upsertUser(claims: any) {
 }
 
 export async function setupAuth(app: Express) {
+  const USE_REPLIT_AUTH = process.env.REPL_ID && process.env.MOCK_DB !== 'true';
+  
   app.set("trust proxy", 1);
   app.use(getSession());
   app.use(passport.initialize());
   app.use(passport.session());
+
+  // Skip Replit Auth setup if not using Replit
+  if (!USE_REPLIT_AUTH) {
+    console.log("🔐 Using custom authentication (not Replit OAuth)");
+    passport.serializeUser((user, done) => done(null, user));
+    passport.deserializeUser((user: any, done) => done(null, user));
+    return;
+  }
+  
+  console.log("🔐 Using Replit OAuth authentication");
 
   const config = await getOidcConfig();
 
@@ -129,6 +164,28 @@ export async function setupAuth(app: Express) {
 }
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
+  const USE_REPLIT_AUTH = process.env.REPL_ID && process.env.MOCK_DB !== 'true';
+  
+  // Custom authentication (check session)
+  if (!USE_REPLIT_AUTH) {
+    console.log("Checking session. SessionID:", (req as any).sessionID, "UserId:", (req as any).session?.userId);
+    
+    if ((req as any).session?.userId) {
+      // Reconstruct user object for compatibility
+      (req as any).user = {
+        claims: {
+          sub: (req as any).session.userId,
+          email: (req as any).session.email,
+          first_name: (req as any).session.firstName,
+          last_name: (req as any).session.lastName,
+        }
+      };
+      return next();
+    }
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  // Replit OAuth authentication
   const user = req.user as any;
 
   if (!req.isAuthenticated() || !user.expires_at) {

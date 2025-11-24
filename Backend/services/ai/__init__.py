@@ -9,14 +9,14 @@ This module contains all AI/ML services including:
 """
 
 from .skill_extractor import SkillExtractor
-from .rag_service import RAGService
+# from .rag_service import RAGService  # Temporarily disabled - needs langchain.chains
 from .embeddings_service import EmbeddingsService
-from .llm_service import LLMService
+# from .llm_service import LLMService  # Temporarily disabled - needs langchain.prompts
 
 __all__ = [
     "SkillExtractor",
-    "RAGService",
+    # "RAGService",
     "EmbeddingsService",
-    "LLMService"
+    # "LLMService"
 ]
 

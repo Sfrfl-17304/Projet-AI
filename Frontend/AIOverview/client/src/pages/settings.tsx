@@ -124,10 +124,21 @@ export default function Settings() {
               Export Learning Progress
             </a>
           </Button>
-          <Button variant="outline" className="w-full justify-start text-destructive" asChild data-testid="button-logout">
-            <a href="/api/logout">
-              Logout
-            </a>
+          <Button 
+            variant="outline" 
+            className="w-full justify-start text-destructive" 
+            onClick={async () => {
+              try {
+                await fetch('/api/logout', { method: 'POST', credentials: 'include' });
+                window.location.href = '/';
+              } catch (error) {
+                console.error('Logout error:', error);
+                window.location.href = '/';
+              }
+            }}
+            data-testid="button-logout"
+          >
+            Logout
           </Button>
         </CardContent>
       </Card>

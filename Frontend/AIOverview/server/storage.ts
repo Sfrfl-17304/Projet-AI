@@ -1,4 +1,9 @@
-// Database storage implementation - referenced from javascript_database and javascript_log_in_with_replit blueprints
+// Database storage implementation
+import { config } from "dotenv";
+
+// Load environment variables FIRST
+config();
+
 import {
   users,
   userCvs,
@@ -36,8 +41,9 @@ import { db } from "./db";
 import { eq, and, desc, inArray } from "drizzle-orm";
 
 export interface IStorage {
-  // User operations (required for Replit Auth)
+  // User operations
   getUser(id: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
 
   // CV operations
@@ -79,9 +85,14 @@ export interface IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
-  // User operations (required for Replit Auth)
+  // User operations
   async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
     return user;
   }
 
@@ -283,4 +294,7 @@ export class DatabaseStorage implements IStorage {
   }
 }
 
-export const storage = new DatabaseStorage();
+console.log('📦 Storage mode: DATABASE');
+export const storage: IStorage = new DatabaseStorage();
+
+
