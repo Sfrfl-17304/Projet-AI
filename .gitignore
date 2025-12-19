@@ -3,11 +3,19 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.py[cod]
+*$py.class
 
 # Virtual environments
 venv/
+env/
+ENV/
+.venv
+
+# Environment variables
 .env
 .env.*
+!.env.example
 
 # Dataset (Onet or any large files)
 BD/txt/OnsetDATA/
@@ -21,3 +29,37 @@ BD/data/
 
 # IDE / Editor
 .vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Uploads
+uploads/
+temp/
+
+# Node modules (Frontend)
+node_modules/
+dist/
+build/
+.cache/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files
+*.txt
+!requirements.txt
+!README.txt
