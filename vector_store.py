@@ -10,7 +10,7 @@ import numpy as np
 class VectorStore:
     def __init__(self, model_name="all-MiniLM-L6-v2"):
         """Initialize with a sentence transformer model"""
-        self.model = SentenceTransformer(model_name)
+        self.model = SentenceTransformer(model_name, device='cpu')
         self.collection = mongo.get_collection("documents")
         print(f"Loaded embedding model: {model_name}")
     

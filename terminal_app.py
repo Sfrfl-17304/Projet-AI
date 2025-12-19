@@ -13,7 +13,7 @@ def main():
     print("=" * 60)
     
     # Initialize
-    rag = RAGPipeline(use_openai=True)
+    rag = RAGPipeline(use_groq=True)
     loader = DocumentLoader()
     
     while True:

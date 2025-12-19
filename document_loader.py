@@ -3,8 +3,9 @@ Document Loader - Load and process documents
 """
 import os
 from typing import List
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.document_loaders import PyPDFLoader, TextLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders.pdf import PyPDFLoader
+from langchain_community.document_loaders.text import TextLoader
 
 class DocumentLoader:
     def __init__(self, chunk_size=1000, chunk_overlap=200):

@@ -16,7 +16,7 @@ st.set_page_config(
 
 # Initialize session state
 if 'rag_pipeline' not in st.session_state:
-    st.session_state.rag_pipeline = RAGPipeline(use_openai=True)
+    st.session_state.rag_pipeline = RAGPipeline(use_groq=True)
 if 'messages' not in st.session_state:
     st.session_state.messages = []
 
