@@ -1,8 +1,8 @@
 """
-RAG Pipeline - Retrieval Augmented Generation
+RAG Pipeline - Retrieval Augmented Generation with Neo4j
 """
 import os
-from typing import List
+from typing import List, Optional
 from dotenv import load_dotenv
 from vector_store import VectorStore
 from langchain_groq import ChatGroq
@@ -11,9 +11,10 @@ from langchain_core.prompts import ChatPromptTemplate
 load_dotenv()
 
 class RAGPipeline:
-    def __init__(self, use_groq=True):
+    def __init__(self, use_groq=True, neo4j_manager=None):
         """Initialize RAG pipeline"""
         self.vector_store = VectorStore()
+        self.neo4j_manager = neo4j_manager
 
         # Initialize LLM (Groq or fallback to simple template)
         self.use_groq = use_groq
@@ -44,6 +45,62 @@ Question: {question}
 
 Answer:""")
         ])
+        
+        # Create skills-focused prompt template
+        self.skills_prompt_template = ChatPromptTemplate.from_messages([
+            ("system", """You are a career advisor AI assistant. Use the knowledge graph data and context provided to give personalized career recommendations. 
+Be specific, helpful, and mention actual skills, fields, and percentages from the data."""),
+            ("user", """Knowledge Graph Data:
+{graph_context}
+
+User's Skills: {user_skills}
+
+Question: {question}
+
+Provide a detailed, personalized answer based on the user's skills and the available career fields."""
+)
+        ])
+    
+    def query_with_skills(self, question: str, user_skills: List[str]) -> dict:
+        """Query with skills context from Neo4j"""
+        if not self.neo4j_manager or not user_skills:
+            return self.query(question)
+        
+        # Get recommendations from Neo4j
+        recommendations = self.neo4j_manager.get_field_recommendations(user_skills)
+        evaluation = self.neo4j_manager.evaluate_skills(user_skills)
+        
+        # Build graph context
+        graph_context = "Career Field Analysis:\n\n"
+        
+        for rec in recommendations[:3]:
+            graph_context += f"**{rec['field']}** ({rec['match_percentage']:.1f}% match)\n"
+            graph_context += f"- Your matching skills: {', '.join(rec['your_skills'][:5])}\n"
+            if rec['skills_to_learn']:
+                graph_context += f"- Skills to learn: {', '.join(rec['skills_to_learn'][:3])}\n"
+            graph_context += "\n"
+        
+        # Generate answer using skills template
+        if self.use_groq:
+            try:
+                messages = self.skills_prompt_template.format_messages(
+                    graph_context=graph_context,
+                    user_skills=", ".join(user_skills),
+                    question=question
+                )
+                response = self.llm.invoke(messages)
+                answer = response.content
+            except Exception as e:
+                answer = f"Based on your skills analysis:\n\n{graph_context}"
+        else:
+            answer = f"Based on your skills analysis:\n\n{graph_context}"
+        
+        return {
+            "answer": answer,
+            "sources": [],
+            "recommendations": recommendations,
+            "evaluation": evaluation
+        }
     
     def query(self, question: str, k: int = 4) -> dict:
         """Query the RAG pipeline"""

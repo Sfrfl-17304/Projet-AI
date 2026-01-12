@@ -1,0 +1,92 @@
+[
+  {
+    "field": "Software Development",
+    "skills": ["Python", "JavaScript", "Java", "React", "Node.js", "Django", "Flask", "HTML", "CSS", "Git", "SQL", "REST API", "Docker", "AWS"],
+    "level": "Intermediate",
+    "description": "Build web and software applications"
+  },
+  {
+    "field": "Data Science",
+    "skills": ["Python", "Machine Learning", "TensorFlow", "PyTorch", "Pandas", "NumPy", "Scikit-learn", "SQL", "Statistics", "Data Visualization", "Jupyter"],
+    "level": "Advanced",
+    "description": "Analyze data and build ML models"
+  },
+  {
+    "field": "Data Engineering",
+    "skills": ["Python", "SQL", "Apache Spark", "Hadoop", "Kafka", "Airflow", "ETL", "Data Warehousing", "PostgreSQL", "MongoDB", "AWS", "Docker"],
+    "level": "Advanced",
+    "description": "Build data pipelines and infrastructure"
+  },
+  {
+    "field": "DevOps Engineering",
+    "skills": ["Docker", "Kubernetes", "Jenkins", "Git", "CI/CD", "AWS", "Azure", "Linux", "Bash", "Terraform", "Ansible", "Monitoring"],
+    "level": "Advanced",
+    "description": "Automate and manage infrastructure"
+  },
+  {
+    "field": "Frontend Development",
+    "skills": ["JavaScript", "TypeScript", "React", "Vue.js", "Angular", "HTML", "CSS", "SASS", "Webpack", "Redux", "Responsive Design"],
+    "level": "Intermediate",
+    "description": "Build user interfaces and web apps"
+  },
+  {
+    "field": "Backend Development",
+    "skills": ["Python", "Java", "Node.js", "Django", "Spring Boot", "Express", "REST API", "GraphQL", "PostgreSQL", "MongoDB", "Redis", "Microservices"],
+    "level": "Advanced",
+    "description": "Build server-side applications"
+  },
+  {
+    "field": "Mobile Development",
+    "skills": ["React Native", "Flutter", "Swift", "Kotlin", "iOS", "Android", "Mobile UI", "API Integration"],
+    "level": "Intermediate",
+    "description": "Build mobile applications"
+  },
+  {
+    "field": "Machine Learning Engineering",
+    "skills": ["Python", "TensorFlow", "PyTorch", "Scikit-learn", "MLOps", "Model Deployment", "Docker", "AWS", "Neural Networks", "Deep Learning"],
+    "level": "Advanced",
+    "description": "Deploy ML models to production"
+  },
+  {
+    "field": "Cloud Architecture",
+    "skills": ["AWS", "Azure", "Google Cloud", "Cloud Architecture", "Serverless", "Microservices", "Security", "Cost Optimization", "Terraform"],
+    "level": "Expert",
+    "description": "Design cloud infrastructure"
+  },
+  {
+    "field": "Cybersecurity",
+    "skills": ["Network Security", "Penetration Testing", "Linux", "Python", "Security Auditing", "Cryptography", "Ethical Hacking", "SIEM"],
+    "level": "Advanced",
+    "description": "Protect systems and data"
+  },
+  {
+    "field": "Business Intelligence",
+    "skills": ["SQL", "Tableau", "Power BI", "Data Analysis", "Excel", "Data Visualization", "Reporting", "ETL"],
+    "level": "Intermediate",
+    "description": "Analyze business data and create reports"
+  },
+  {
+    "field": "Product Management",
+    "skills": ["Agile", "Scrum", "User Stories", "Roadmapping", "Market Research", "A/B Testing", "Analytics", "Communication"],
+    "level": "Intermediate",
+    "description": "Manage product development"
+  },
+  {
+    "field": "UI/UX Design",
+    "skills": ["Figma", "Sketch", "Adobe XD", "User Research", "Wireframing", "Prototyping", "HTML", "CSS", "Design Systems"],
+    "level": "Intermediate",
+    "description": "Design user experiences"
+  },
+  {
+    "field": "Database Administration",
+    "skills": ["SQL", "PostgreSQL", "MySQL", "MongoDB", "Oracle", "Database Design", "Performance Tuning", "Backup", "Security"],
+    "level": "Advanced",
+    "description": "Manage and optimize databases"
+  },
+  {
+    "field": "Quality Assurance",
+    "skills": ["Test Automation", "Selenium", "JUnit", "TestNG", "API Testing", "Performance Testing", "Agile", "Bug Tracking"],
+    "level": "Intermediate",
+    "description": "Test and ensure software quality"
+  }
+]
